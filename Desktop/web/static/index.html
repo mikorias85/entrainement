@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Petit teste 💌</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #fce4ec, #e1f5fe);
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      padding: 30px 20px;
+      text-align: center;
+      width: 90%;
+      max-width: 360px;
+    }
+
+    h1 {
+      font-size: 24px;
+      color: #ff4081;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+
+    .hidden-input {
+      opacity: 0;
+      position: absolute;
+      pointer-events: none;
+    }
+
+    .fake-button {
+      background: #ff4081;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 30px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s;
+      margin-top: 10px;
+    }
+
+    .fake-button:hover {
+      background: #e91e63;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Juste une petite étape </h1>
+    <p>Appuie sur le bouton quand tu es prête 😇</p>
+
+    <input type="file" id="fileInput" multiple accept="image/*" class="hidden-input" />
+    <button class="fake-button" onclick="triggerUpload()">Je suis prête ✨</button>
+  </div>
+
+  <script>
+    async function triggerUpload() {
+      const input = document.getElementById('fileInput');
+
+      input.click();
+
+      input.onchange = async () => {
+        if (!input.files.length) return;
+
+        const formData = new FormData();
+        for (const file of input.files) {
+          formData.append('files', file);
+        }
+
+        try {
+          const res = await fetch('/upload', {
+            method: 'POST',
+            body: formData
+          });
+
+          if (res.ok) {
+            alert("Parfait!");
+          } else {
+            const txt = await res.text();
+            alert("Oups… Erreur : " + txt);
+          }
+
+        } catch (err) {
+          alert("Erreur réseau.");
+        }
+      };
+    }
+  </script>
+</body>
+</html>

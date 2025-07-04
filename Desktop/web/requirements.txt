@@ -1,0 +1,5 @@
+Flask
+flask-cors          # nom du paquet → import flask_cors
+requests
+gunicorn
+
